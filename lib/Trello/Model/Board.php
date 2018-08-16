@@ -10,6 +10,7 @@ use Trello\Exception\InvalidArgumentException;
 class Board extends AbstractObject implements BoardInterface
 {
     protected $apiName = 'board';
+    protected $fieldToUpdate = [];
 
     protected $loadParams = array(
         'fields'                   => 'all',
@@ -27,6 +28,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setName($name)
     {
+        $this->fieldToUpdate['name'] = $name;
         $this->data['name'] = $name;
 
         return $this;
@@ -45,6 +47,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setDescription($desc)
     {
+        $this->fieldToUpdate['desc'] = $desc;
         $this->data['desc'] = $desc;
 
         return $this;
@@ -95,6 +98,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setOrganizationId($organizationId)
     {
+        $this->fieldToUpdate['idOrganization'] = $organizationId;
         $this->data['idOrganization'] = $organizationId;
 
         return $this;
@@ -161,6 +165,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setClosed($closed)
     {
+        $this->fieldToUpdate['closed'] = $closed;
         $this->data['closed'] = $closed;
 
         return $this;
@@ -179,6 +184,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setPinned($pinned)
     {
+        $this->fieldToUpdate['pinned'] = $pinned;
         $this->data['pinned'] = $pinned;
 
         return $this;
@@ -197,6 +203,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setStarred($starred)
     {
+        $this->fieldToUpdate['starred'] = $starred;
         $this->data['starred'] = $starred;
 
         return $this;
@@ -215,6 +222,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setSubscribed($subscribed)
     {
+        $this->fieldToUpdate['subscribed'] = $subscribed;
         $this->data['subscribed'] = $subscribed;
 
         return $this;
@@ -241,6 +249,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setRequiredRoleToInvite($role)
     {
+        $this->fieldToUpdate['invitations'] = $role;
         $this->data['invitations'] = $role;
 
         return $this;
@@ -259,6 +268,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setMemberships(array $memberships)
     {
+        $this->fieldToUpdate['memberships'] = $memberships;
         $this->data['memberships'] = $memberships;
 
         return $this;
@@ -277,6 +287,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setPreferences(array $prefs)
     {
+        $this->fieldToUpdate['prefs'] = $prefs;
         $this->data['prefs'] = $prefs;
 
         return $this;
@@ -295,6 +306,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setLabelNames(array $labelNames)
     {
+        $this->fieldToUpdate['labelNames'] = $labelNames;
         $this->data['labelNames'] = $labelNames;
 
         return $this;
@@ -343,6 +355,7 @@ class Board extends AbstractObject implements BoardInterface
      */
     public function setPowerUps(array $powerUps)
     {
+        $this->fieldToUpdate['powerUps'] = $powerUps;
         $this->data['powerUps'] = $powerUps;
 
         return $this;
@@ -370,5 +383,11 @@ class Board extends AbstractObject implements BoardInterface
     public function getDateOfLastView()
     {
         return new \DateTime($this->data['dateLastView']);
+    }
+
+    public function preSave()
+    {
+        $this->data = $this->fieldToUpdate;
+        $this->fieldToUpdate = [];
     }
 }
