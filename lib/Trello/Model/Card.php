@@ -24,7 +24,6 @@ class Card extends AbstractObject implements CardInterface
         'checklists'      => 'all',
         'checkItemStates' => true,
         'labels'          => true,
-        'attachments'     => true,
         'actions'         => Events::CARD_COMMENT,
     );
 
@@ -645,9 +644,11 @@ class Card extends AbstractObject implements CardInterface
 
     public function addAttachment($url, $name = '')
     {
-        foreach ($this->data['attachments'] as $existing) {
-            if ($existing['url'] === $url && $existing['name'] === $name) {
-                return $this;
+        if (array_key_exists('attachments', $this->data)) { 
+            foreach ($this->data['attachments'] as $existing) {
+                if ($existing['url'] === $url && $existing['name'] === $name) {
+                    return $this;
+                }
             }
         }
         $this->newAttachments[] = [
