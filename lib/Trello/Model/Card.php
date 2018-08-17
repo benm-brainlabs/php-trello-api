@@ -24,6 +24,7 @@ class Card extends AbstractObject implements CardInterface
         'checklists'      => 'all',
         'checkItemStates' => true,
         'labels'          => true,
+        'attachments'     => true,
         'actions'         => Events::CARD_COMMENT,
     );
 
