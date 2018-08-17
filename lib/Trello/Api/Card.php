@@ -31,6 +31,7 @@ class Card extends AbstractApi
      * @var array
      */
     public static $fields = array(
+	'attachments',
         'badges',
         'checkItemStates',
         'closed',
