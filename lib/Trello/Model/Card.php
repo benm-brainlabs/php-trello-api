@@ -31,6 +31,7 @@ class Card extends AbstractObject implements CardInterface
     protected $newComments = array();
     protected $commentsToBeRemoved = array();
     protected $newAttachments = array();
+    protected $attachmentsToBeRemoved = array();
 
     /**
      * {@inheritdoc}
@@ -644,7 +645,7 @@ class Card extends AbstractObject implements CardInterface
 
     public function addAttachment($url, $name = '')
     {
-        if (array_key_exists('attachments', $this->data)) { 
+        if (array_key_exists('attachments', $this->data)) {
             foreach ($this->data['attachments'] as $existing) {
                 if ($existing['url'] === $url && $existing['name'] === $name) {
                     return $this;
@@ -656,6 +657,16 @@ class Card extends AbstractObject implements CardInterface
             'name' => $name
         ];
 
+        return $this;
+    }
+
+    public function removeAttachments()
+    {
+        foreach ($this->data['attachments'] as $attachment) {
+            $this->attachmentsToBeRemoved[] = $attachment['id'];
+        }
+        $this->data['attachments'] = [];
+        $this->newAttachments = [];
         return $this;
     }
 
@@ -854,6 +865,11 @@ class Card extends AbstractObject implements CardInterface
         foreach ($this->newAttachments as $key => $attachment) {
             $this->api->attachments()->create($this->id, $attachment);
             unset($this->newAttachments[$key]);
+        }
+
+        foreach ($this->attachmentsToBeRemoved as $key => $attachmentId) {
+            $this->api->attachments()->remove($this->id, $attachmentId);
+            unset($this->attachmentsToBeRemoved[$key]);
         }
     }
 }
