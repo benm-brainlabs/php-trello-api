@@ -660,6 +660,11 @@ class Card extends AbstractObject implements CardInterface
         return $this;
     }
 
+    public function getAttachments()
+    {
+        return $this->data['attachments'];
+    }
+
     public function removeAttachments()
     {
         foreach ($this->data['attachments'] as $attachment) {
