@@ -675,6 +675,18 @@ class Card extends AbstractObject implements CardInterface
         return $this;
     }
 
+    public function removeAttachment($attachmentId)
+    {
+        $this->attachmentsToBeRemoved[] = $attachmentId;
+        foreach ($this->data['attachments'] as $key => $attachment) {
+            if ($attachment['id'] === $attachmentId) {
+                unset($this->data['attachments'][$key]);
+                return $this;
+            }
+        }
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
