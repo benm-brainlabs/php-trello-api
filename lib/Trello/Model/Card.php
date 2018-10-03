@@ -12,6 +12,7 @@ use Trello\Exception\RuntimeException;
 class Card extends AbstractObject implements CardInterface
 {
     protected $apiName = 'card';
+    protected $fieldToUpdate = [];
 
     protected $loadParams = array(
         'fields'          => 'all',
@@ -46,6 +47,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setName($name)
     {
+        $this->fieldToUpdate['name'] = $name;
         $this->data['name'] = $name;
 
         return $this;
@@ -64,6 +66,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setDescription($desc)
     {
+        $this->fieldToUpdate['desc'] = $desc;
         $this->data['desc'] = $desc;
 
         return $this;
@@ -114,6 +117,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setPosition($pos)
     {
+        $this->fieldToUpdate['pos'] = $pos;
         $this->data['pos'] = $pos;
 
         return $this;
@@ -132,6 +136,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setDueDate(\DateTime $due = null)
     {
+        $this->fieldToUpdate['due'] = $due;
         $this->data['due'] = $due;
 
         return $this;
@@ -154,6 +159,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setEmail($email)
     {
+        $this->fieldToUpdate['email'] = $email;
         $this->data['email'] = $email;
 
         return $this;
@@ -172,6 +178,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setClosed($closed)
     {
+        $this->fieldToUpdate['closed'] = $closed;
         $this->data['closed'] = $closed;
 
         return $this;
@@ -190,6 +197,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setSubscribed($subscribed)
     {
+        $this->fieldToUpdate['subscribed'] = $subscribed;
         $this->data['subscribed'] = $subscribed;
 
         return $this;
@@ -208,6 +216,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setCheckItemStates(array $checkItemStates)
     {
+        $this->fieldToUpdate['checkItemStates'] = $checkItemStates;
         $this->data['checkItemStates'] = $checkItemStates;
 
         return $this;
@@ -226,6 +235,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setBoardId($boardId)
     {
+        $this->fieldToUpdate['idBoard'] = $boardId;
         $this->data['idBoard'] = $boardId;
 
         return $this;
@@ -260,6 +270,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setListId($listId)
     {
+        $this->fieldToUpdate['idList'] = $listId;
         $this->data['idList'] = $listId;
 
         return $this;
@@ -312,6 +323,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setChecklistIds(array $checklistIds)
     {
+        $this->fieldToUpdate['idChecklists'] = $checklistIds;
         $this->data['idChecklists'] = $checklistIds;
 
         return $this;
@@ -422,7 +434,6 @@ class Card extends AbstractObject implements CardInterface
                 $this->getName()
             ));
         }
-
         $this->data['idChecklists'][] = $checklist->getId();
 
         return $this;
@@ -460,6 +471,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setMemberIds(array $memberIds)
     {
+        $this->fieldToUpdate['idMembers'] = $memberIds;
         $this->data['idMembers'] = $memberIds;
 
         return $this;
@@ -493,9 +505,8 @@ class Card extends AbstractObject implements CardInterface
                 $this->getName()
             ));
         }
-
         $this->data['idMembers'][] = $member->getId();
-
+        $this->fieldToUpdate['idMembers'] = $this->data['idMembers'];
         return $this;
     }
 
@@ -511,12 +522,12 @@ class Card extends AbstractObject implements CardInterface
                 $this->getName()
             ));
         }
-
         foreach ($this->data['idMembers'] as $key => $memberArray) {
             if ($memberArray['id'] === $member->getId()) {
                 unset($this->data['idMembers'][$key]);
             }
         }
+        $this->fieldToUpdate['idMembers'] = $this->data['idMembers'];
 
         return $this;
     }
@@ -554,6 +565,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setMembersVotedIds(array $membersVotedIds)
     {
+        $this->fieldToUpdate['idMembersVoted'] = $membersVotedIds;
         $this->data['idMembersVoted'] = $membersVotedIds;
 
         return $this;
@@ -587,8 +599,8 @@ class Card extends AbstractObject implements CardInterface
                 $this->getName()
             ));
         }
-
         $this->data['idMembersVoted'][] = $member->getId();
+        $this->fieldToUpdate['idMembersVoted'] = $this->data['idMembersVoted'];
 
         return $this;
     }
@@ -611,6 +623,7 @@ class Card extends AbstractObject implements CardInterface
                 unset($this->data['idMembersVoted'][$key]);
             }
         }
+        $this->fieldToUpdate['idMembersVoted'] = $this->data['idMembersVoted'];
 
         return $this;
     }
@@ -680,6 +693,7 @@ class Card extends AbstractObject implements CardInterface
         $this->attachmentsToBeRemoved[] = $attachmentId;
         foreach ($this->data['attachments'] as $key => $attachment) {
             if ($attachment['id'] === $attachmentId) {
+                $this->attachmentsToBeRemoved[] = $attachmentId;
                 unset($this->data['attachments'][$key]);
                 return $this;
             }
@@ -692,6 +706,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setAttachmentCoverId($attachmentCoverId)
     {
+        $this->fieldToUpdate['idAttachmentCover'] = $attachmentCoverId;
         $this->data['idAttachmentCover'] = $attachmentCoverId;
 
         return $this;
@@ -710,6 +725,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setManualCoverAttachment($coverAttachment)
     {
+        $this->fieldToUpdate['manualCoverAttachment'] = $coverAttachment;
         $this->data['manualCoverAttachment'] = $coverAttachment;
 
         return $this;
@@ -728,6 +744,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setLabels(array $labels)
     {
+        $this->fieldToUpdate['idLabels'] = $labels;
         $this->data['idLabels'] = $labels;
 
         return $this;
@@ -763,6 +780,7 @@ class Card extends AbstractObject implements CardInterface
     public function addLabel(LabelInterface $label)
     {
         $this->data['idLabels'][] = $label->getId();
+        $this->fieldToUpdate['idLabels'] = $this->data['idLabels'];
         return $this;
     }
 
@@ -776,6 +794,7 @@ class Card extends AbstractObject implements CardInterface
                 unset($this->data['idLabels'][$key]);
             }
         }
+        $this->fieldToUpdate['idLabels'] = $this->data['idLabels'];
         return $this;
     }
 
@@ -784,6 +803,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setBadges(array $badges)
     {
+        $this->fieldToUpdate['badges'] = $badges;
         $this->data['badges'] = $badges;
 
         return $this;
@@ -838,6 +858,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setIdCardSource($id)
     {
+        $this->fieldToUpdate['idCardSource'] = $id;
         $this->data['idCardSource'] = $id;
 
         return $this;
@@ -848,6 +869,7 @@ class Card extends AbstractObject implements CardInterface
      */
     public function setKeepFromSource($keep)
     {
+        $this->fieldToUpdate['keepFromSource'] = $keep;
         $this->data['keepFromSource'] = $keep;
 
         return $this;
@@ -858,6 +880,8 @@ class Card extends AbstractObject implements CardInterface
      */
     protected function preSave()
     {
+        $this->data = $this->fieldToUpdate;
+        $this->fieldToUpdate = [];
         foreach ($this->newChecklists as $checklist) {
             $checklist->save();
             $this->addChecklist($checklist);
